@@ -8,7 +8,8 @@ Python 3
 Feature 1: Output 'trusted' if the 2 Ids in the transaction only have 1 degree seperation, output 'unverified' otherwise.  
 Feature 2: Output 'trusted' if the 2 Ids in the transaction have at most 2 degree seperation (i.e. friend of a friend), output 'unverified' otherwise.  
 Feature 3: Output 'trusted' if the 2 Ids in the transaction have at most 4 degree seperation, output 'unverified' otherwise. 
-Feature 4: Output 'trusted' if the transaction amount is at most than twice the previous maximum transaction amount between the 2 Ids. 
+Feature 4: Output 'trusted' if the transaction amount is at most than twice the previous maximum transaction amount between the 2 Ids.
+
 Feature 5: Output 'trusted' if the transaction date is at most 60 days after the most recent transaction amount between the 2 Ids. 
 
 ## Design Decisions ##
