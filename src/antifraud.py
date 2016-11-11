@@ -128,6 +128,7 @@ def readStreaming(streamingFile, outputFile, adjListTrans, hashMaxs):
                 #Feature 4: Trusted if transaction amount is less than 2x the previous maximum transaction amount       
                 elif pathFilename(file) == 'output4.txt':
                     if (hashMaxs[id1].get(id2) == None):
+                        #Values set to ensure 'unverified' will be written to file
                         hashMaxs[id1][id2]['amount'] = maxAmt/2-1
                         hashMaxs[id2][id1]['amount'] = maxAmt/2-1
                         hashMaxs[id1][id2]['date'] = recentDate - timedelta(days=90)
@@ -139,6 +140,7 @@ def readStreaming(streamingFile, outputFile, adjListTrans, hashMaxs):
                 #Feature 5: Trusted if transaction date is within 60 days of last transaction
                 elif pathFilename(file) == 'output5.txt':
                     if (hashMaxs[id1].get(id2) == None):
+                        #Values set to ensure 'unverified' will be written to file
                         hashMaxs[id1][id2]['amount'] = maxAmt/2-1
                         hashMaxs[id2][id1]['amount'] = maxAmt/2-1
                         hashMaxs[id1][id2]['date'] = recentDate - timedelta(days=90)
