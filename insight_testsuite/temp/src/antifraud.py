@@ -1,7 +1,7 @@
 import csv
 from collections import defaultdict
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 import ntpath
 from queue import deque
@@ -99,7 +99,6 @@ def readStreaming(streamingFile, outputFile, adjListTrans, hashMaxs):
     headers = reader.fieldnames  
     #Dictionary of filenames to allow variable number of features to be tested
     files = {filename: open(filename, 'w') for filename in outputFile}
-    i=1    
     for row in reader:
         #Only run if rows have something in every field
         if row[headers[0]] and row[headers[1]] and row[headers[2]] and row[headers[3]]:
@@ -108,50 +107,48 @@ def readStreaming(streamingFile, outputFile, adjListTrans, hashMaxs):
             #Find degree seperation between 2 Ids using BFS
             degrees = BFS(adjListTrans, id1, id2)
             for file in files:
-                #Feature 1: Verified if 2 Ids only have 1 degree seperation
+                #Feature 1: Trusted if 2 Ids only have 1 degree seperation
                 if pathFilename(file) == 'output1.txt':
                     if (degrees <= 1):
                         files[file].write("trusted\n")
                     else:
                         files[file].write("unverified\n")
-                #Feature 2: Verified if 2 Ids have at most 2 degree seperation       
+                #Feature 2: Trusted if 2 Ids have at most 2 degree seperation       
                 elif pathFilename(file) == 'output2.txt':    
                     if (degrees <= 2):
                         files[file].write("trusted\n")
                     else:
                         files[file].write("unverified\n")
-                #Feature 3: Verified if 2 Ids have at most 4 degree seperation  
+                #Feature 3: Trusted if 2 Ids have at most 4 degree seperation  
                 elif pathFilename(file) == 'output3.txt':
                     if (degrees <= 4):
                         files[file].write("trusted\n")
                     else:
                         files[file].write("unverified\n")
-                #Feature 4: Verified if transaction amount is less than 2x the previous maximum transaction amount       
+                #Feature 4: Trusted if transaction amount is less than 2x the previous maximum transaction amount       
                 elif pathFilename(file) == 'output4.txt':
                     if (hashMaxs[id1].get(id2) == None):
-                        hashMaxs[id1][id2]['amount'] = maxAmt
-                        hashMaxs[id2][id1]['amount'] = maxAmt
-                        hashMaxs[id1][id2]['date'] = recentDate 
-                        hashMaxs[id2][id1]['date'] = recentDate
+                        hashMaxs[id1][id2]['amount'] = maxAmt/2-1
+                        hashMaxs[id2][id1]['amount'] = maxAmt/2-1
+                        hashMaxs[id1][id2]['date'] = recentDate - timedelta(days=90)
+                        hashMaxs[id2][id1]['date'] = recentDate - timedelta(days=90)
                     if maxAmt > (2*hashMaxs[id1][id2]['amount']):
-                        files[file].write("unverified")
+                        files[file].write("unverified\n")
                     else:
                         files[file].write("trusted\n")
-                #Feature 5: Verified if transaction date is within 60 days of last transaction
+                #Feature 5: Trusted if transaction date is within 60 days of last transaction
                 elif pathFilename(file) == 'output5.txt':
                     if (hashMaxs[id1].get(id2) == None):
-                        hashMaxs[id1][id2]['amount'] = maxAmt
-                        hashMaxs[id2][id1]['amount'] = maxAmt
-                        hashMaxs[id1][id2]['date'] = recentDate 
-                        hashMaxs[id2][id1]['date'] = recentDate
-                    #Calculate difference in days
+                        hashMaxs[id1][id2]['amount'] = maxAmt/2-1
+                        hashMaxs[id2][id1]['amount'] = maxAmt/2-1
+                        hashMaxs[id1][id2]['date'] = recentDate - timedelta(days=90)
+                        hashMaxs[id2][id1]['date'] = recentDate - timedelta(days=90)
+                        #Calculate difference in days
                     daysDiff = (recentDate-hashMaxs[id1][id2]['date']).days
                     if daysDiff > 60:
                         files[file].write("unverified\n")
                     else:
                         files[file].write("trusted\n")
-            print (i, flush='TRUE')
-            i = i+1
             #Update adjacency list and hash table
             adjListTrans = updateAdjListTrans(id1, id2, adjListTrans)
             hashMaxs = updatehashMaxs(id1, id2, maxAmt, recentDate, hashMaxs)
@@ -170,8 +167,6 @@ def BFS(adj_list, start, end):
         path = queue.pop()
         #Get last node in the path
         node = path[-1]
-        print(path)
-        
         #Check if second Id last in path, if so return degrees seperation
         if node == end:
             return (len(path)-1)
