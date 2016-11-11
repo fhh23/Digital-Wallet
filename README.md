@@ -17,7 +17,7 @@ Feature 5: Output 'trusted' if the transaction date is at most 60 days after the
 3. Several implementation decisions were made to make the code robust. 
   1. No file paths are hard-coded. This allows the code to deviate from the given directory structure, as long as the correct paths are passed to run.sh. 
   2. The number of input arguments to run.sh is not hard-coded. This allows the output files to be passed to run.sh in any order, and for any combination of features to be tested. The only requirements for the output file names and order are listed in the "Assumptions" section. 
-  3. Check are done for all field names in the case of faulty data in the batch or stream files. Only the date field has a requirement for how the datetime must be formatted, and it is listed in the "Assumptions" section. 
+  3. Checks are done for all field names in the case of faulty data in the batch or stream files. Only the date field has a requirement for formatting, and it is listed in the "Assumptions" section. 
 
 
 ## Assumptions ##
