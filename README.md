@@ -1,5 +1,5 @@
 # Digital Wallet #
-Farhan Hormasji
+Team: Farhan Hormasji
 
 ## Runtime Environment ##
 Python 3
@@ -12,12 +12,12 @@ Feature 4: Output 'trusted' if the transaction amount is at most than twice the 
 Feature 5: Output 'trusted' if the transaction date is at most 60 days after the most recent transaction amount between the 2 Ids, output 'unverified' otherwise.  
 
 ## Implementation Decisions ##
-1. Features 1,2,3 all have to do with finding the degrees of seperation between the 2 Ids involved in a transaction. To find this, the adjacency list data structure was used. The adjacency list was built from batch_payment.txt using a python dictionary. To find the number of degrees seperation between two Ids in the adjacency list, the Breadth First Search (BFS) algorithm was used, because it ensures that the shortest path between two Ids will be found. BFS was implemented with the deque data structure for its O(1) time complexity for appendleft() and pop(). Because it was known that the max allowable degrees of seperation allowed was 4 (Feature 3), the BFS algorithm exits if no path of length <= 4 from Id1 to Id2 is found. This was done so that the BFS algorithm only had to be run once for each row in the stream_payment.txt file instead of three times per row (once for Feature 1,2,3). In an actual product, only one of Feature 1,2,3 would probably be used, and so the #degrees of seperation to check for would be passed as a variable to the BFS function instead.
+1. Features 1,2,3 all have to do with finding the degrees of seperation between the 2 Ids involved in a transaction. To find this, the adjacency list data structure was used. The adjacency list was built from batch_payment.txt using a python dictionary. To find the number of degrees seperation between two Ids in the adjacency list, the Breadth First Search (BFS) algorithm was used because it ensures that the shortest path between two Ids will be found. BFS was implemented with the deque data structure for its O(1) time complexity for adding and removing from the deque. Because it was known that the max allowable degrees of seperation allowed was 4 (Feature 3), the BFS algorithm exits if no path of length <= 4 from Id1 to Id2 is found. This was done so that the BFS algorithm only had to be run once for each row in the stream_payment.txt file instead of three times per row (once for Feature 1,2,3). In an actual product, only one of Feature 1,2,3 would probably be used, and so the #degrees of seperation to check for would be passed as a variable to the BFS function instead.
 2. Features 4 and 5 have to do with maintaining the max amount and date value for each Id involved in a transaction. To do this, the hash table data structure was used. The hash table was built from batch_payment.txt using a python dictionary. Both the max transaction amount and most recent transaction date were stored in the same hash table.
 3. Several implementation decisions were made to make the code robust. 
-1. No file paths are hard-coded. This allows the code to deviate from the given directory structure, as long as the correct paths are passed to run.sh. 
-2. The number of input arguments to run.sh is not hard-coded. This allows the output files to be passed to run.sh in any order, and for any combination of features to be tested. The only requirements for the output file names and order are listed in the "Assumptions" section. 
-3. Check are done for all field names in the case of faulty data in the batch or stream files. Only the date field has a requirement for how the datetime must be formatted, and it is listed in the "Assumptions" section. 
+  1. No file paths are hard-coded. This allows the code to deviate from the given directory structure, as long as the correct paths are passed to run.sh. 
+  2. The number of input arguments to run.sh is not hard-coded. This allows the output files to be passed to run.sh in any order, and for any combination of features to be tested. The only requirements for the output file names and order are listed in the "Assumptions" section. 
+  3. Checks are done for all field names in the case of faulty data in the batch or stream files. Only the date field has a requirement for formatting, and it is listed in the "Assumptions" section. 
 
 
 ## Assumptions ##
@@ -30,7 +30,7 @@ Feature 5: Output 'trusted' if the transaction date is at most 60 days after the
 7. The output filename must match with the feature number. It must follow the naming convention output[feature#].txt (e.g., output1.txt corresponds to Feature 1). 
 8. However, any amount and combination of features may be tested, and the output files don't need to be passed to run.sh in any order. For example, if only feature 1 and 3 want to be tested, only the path to output1.txt and output3.txt need to be passed to the program in run.sh.
 9. The batch and streaming input files must have encoding 'utf8' (just as the input files provided do).
-10. The first to files provided as inputs to the program in run.sh must be the batch_payment text file and stream_payment text file in that order. The rest of the files provided should be the output files in any amount and order.
+10. The first two files provided as inputs to the program in run.sh must be batch_payment.txt and stream_payment.txt, in that order. The rest of the files provided should be the output files in any amount and order.
 
 ## Test Suite ##
 1. test-1-paymo-trans: simple test provided
