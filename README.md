@@ -18,7 +18,7 @@ Feature 5: Output 'trusted' if the transaction date is at most 60 days after the
 4. Dates in only the format year-month-day and month/day/year are allowed. If a date has letters in it, the date will default to 11/2/2016.
 5. If Ids have letters in it, the Id will default to 0.
 6. If transaction amounts have letters in it, the transaction amount will default to 0. 
-7. The output filename must match with the feature number. It must follow the naming convention output<feature#>.txt (e.g., output1.txt corresponds to Feature 1). 
+7. The output filename must match with the feature number. It must follow the naming convention output[feature#].txt (e.g., output1.txt corresponds to Feature 1). 
 8. However, any amount and combination of features may be tested, and the output files don't need to be passed to run.sh in any order. For example, if only feature 1 and 3 want to be tested, only the path to output1.txt and output3.txt need to be passed to the program in run.sh.
 9. The batch and streaming input files must have encoding 'utf8' (just as the input files provided do).
 10. The first to files provided as inputs to the program in run.sh must be the batch_payment text file and stream_payment text file in that order. The rest of the files provided should be the output files in any amount and order.
