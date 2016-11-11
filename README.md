@@ -1,5 +1,5 @@
 # Digital Wallet #
-Farhan Hormasji
+Team: Farhan Hormasji
 
 ## Runtime Environment ##
 Python 3
